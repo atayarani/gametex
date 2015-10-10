@@ -1,0 +1,14 @@
+\documentclass{article}
+\begin{document}
+<% game_hash.each do |game, values| %>
+\section{<%= game -%>}
+\paragraph{Description}
+<%= values[:description] %>
+\paragraph{Players}
+<%= values[:minplayers] %> - <%= values[:maxplayers] -%>
+\paragraph{Age}
+<%= values[:age] %> and up
+\paragraph{Keywords}
+<%= values[:mechanics] %>
+<% end %>
+\end{document}
