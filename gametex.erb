@@ -1,7 +1,8 @@
 \documentclass{article}
 \begin{document}
+\pagenumbering {gobble}
 <% game_hash.each do |game, values| %>
-\section{<%= game -%>}
+\section*{<%= game -%>}
 \paragraph{Description}
 <%= values[:description] %>
 \paragraph{Players}
@@ -10,5 +11,7 @@
 <%= values[:age] %> and up
 \paragraph{Keywords}
 <%= values[:mechanics] %>
+\paragraph{Play time}
+<%= values[:minplay] %> - <%= values[:maxplay] -%>
 <% end %>
 \end{document}

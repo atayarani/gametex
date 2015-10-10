@@ -59,7 +59,9 @@ games.each do |game|
     minplayers: game.css('minplayers').text,
     maxplayers: game.css('maxplayers').text,
     age: game.css('age').text,
-    mechanics: keywords(game)
+    mechanics: keywords(game),
+    minplay: game.css('minplaytime').text,
+    maxplay: game.css('maxplaytime').text
   }
 end
 
