@@ -1,33 +1,13 @@
 #!/usr/bin/env ruby
-require 'nokogiri'
 require 'csv'
 require 'json'
 require 'erb'
 require 'open-uri'
+require 'nokogiri'
 require 'htmlentities'
 require 'sanitize'
-
-def user_games
-  game_filename = './collection.csv'
-  game_file = File.read(game_filename)
-  game_list = []
-  csv = CSV.new(game_file, headers: true, header_converters: :symbol)
-  csv.to_a.each do |column|
-    game_list << column[1]
-  end
-
-  game_list
-end
-
-def data_feed
-  site = open('./game.xml')
-  Nokogiri::XML(site)
-end
-
-def build_url(game_list)
-  base_url = 'https://www.boardgamegeek.com/xmlapi/boardgame'
-  "#{base_url}/#{game_list.join(',')}"
-end
+require 'trollop'
+require_relative './feeds.rb'
 
 def keywords(game)
   mechanics = game.css('boardgamemechanic').map(&:text).join(', ')
@@ -49,7 +29,15 @@ def decode_html(html)
   HTMLEntities.new.decode(html).gsub('<br/>', "\n").gsub('&'){'\&'}.gsub('#', '\#').gsub('&gt;', '>')
 end
 
-doc = data_feed
+opts = Trollop.options do
+  # Set help message
+  usage '[options]'
+  synopsis 'This command generates a menu or book of games owned by the user specified'
+  opt :username, 'The boardgamegeek.com username whose collection you want to parse', type: :string, required: true
+end
+
+@feeds = Feeds.new(opts[:username])
+doc = @feeds.game
 games = doc.css('boardgame')
 game_hash = {}
 games.each do |game|
