@@ -34,14 +34,18 @@ opts = Trollop.options do
   usage '[options]'
   synopsis 'This command generates a menu or book of games owned by the user specified'
   opt :username, 'The boardgamegeek.com username whose collection you want to parse', type: :string, required: true
+  opt :age, 'The age of the youngest player playing', type: :int
+  opt :players, 'The number of players playing', type: :int
+  opt :length, 'The number of minutes for the game', type: :int
 end
 
-@feeds = Feeds.new(opts[:username])
+@feeds = Feeds.new(opts)
 doc = @feeds.game
 games = doc.css('boardgame')
 game_hash = {}
 games.each do |game|
   game_name = game.css('name[primary="true"]').text.gsub('&'){'\&'}
+  next unless @feeds.filters(game)
   game_hash[game_name] = {
     description: decode_html(Sanitize.fragment(game.css('description').text)),
     minplayers: game.css('minplayers').text,
