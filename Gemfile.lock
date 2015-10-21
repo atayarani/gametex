@@ -15,6 +15,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (= 1.4.1)
+    trollop (2.1.2)
 
 PLATFORMS
   ruby
@@ -24,3 +25,4 @@ DEPENDENCIES
   htmlentities
   nokogiri
   sanitize
+  trollop
